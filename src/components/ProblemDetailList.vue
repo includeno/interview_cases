@@ -1,7 +1,8 @@
 <template>
-  <div class="board">
+  <div >
     <table align="center">
 <!--        //eslint下必须:写法-->
+      <a-button v-on:click="exportData()"><a-icon type="download" /> 下载 </a-button>
         <div v-for="(entry,index) in problemdata" v-bind:key="index" >
           <ProblemDetail :title="entry.title" :answer="entry.answer"></ProblemDetail>
         </div>
@@ -13,6 +14,7 @@
 
 <script>
 import ProblemDetail from '@/components/ProblemDetail.vue'
+import ProblemListAPI from "@/api/ProblemListAPI";
 
 export default {
   name: 'ProblemDetailList',
@@ -29,21 +31,35 @@ export default {
     }
   },
   mounted() {
-    this.problemdata=[];
-    this.problemdata.push({title:"CCCxxsxdfvbvndkjnjkdbjasbdhsbhdb shdbshabd hsabdhbs adhbsadlnjsabdjkasbdjsajdjasndjasdbsajbdjsabdjsbajdbas",answer:["BBB","C罗"]});
-    this.problemdata.push({title:"A2",answer:["BBB","我爱我的祖国"]});
-    this.problemdata.push({title:"Java基础",answer:["CPU",
-      "文件系统\n" ,
-      "Lnuix\n" ,
-      "磁盘\n" ,
-      "用户态:系统态:内核态\n" ,
-      "协程:进程:线程\n",
-      "管程\n" ,
-      "虚拟内存","我爱我的祖国"]});
+    (this.loadData)();
 
   },
   methods:{
 
+    async loadData() {
+      this.problemdata=[];
+      let response=await ProblemListAPI.getProblemList();
+      let ans=response.data.data;
+      if(ans!=null){
+        for(let i in ans){
+          this.problemdata.push(ans[i]);
+        }
+      }
+    },
+
+    exportData(){
+      let array=[];
+      for(let i=0;i<this.problemdata.length;i++){
+        array.push({title: this.problemdata[i].title, answer: this.problemdata[i].answer, tag: this.problemdata[i].tag});
+      }
+      let url=window.URL.createObjectURL(new Blob([JSON.stringify(array)], {type: "application/json"}))
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      a.click();
+      window.URL.revokeObjectURL(url);
+      //document.removeChild(a);
+    },
   },
   computed:{
 

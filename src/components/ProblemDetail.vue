@@ -1,31 +1,41 @@
 <template>
-  <div style="width: 1200px;display: flex;height: auto;margin: 0 -70px">
+  <div style="width: 1200px;display: flex;margin: 0 -70px">
     <div >
-      <a-card style="width: 750px;height: 100%">
-        <div slot="title">{{simpleTitle}}</div>
+      <a-card style="width: 750px;height: auto">
 
-        <button slot="extra" v-on:click="speakTitle()">阅读题目</button>
-        <button v-if="recordings.length>0" slot="extra" v-on:click="speakAnswer()">阅读所有答案</button>
+        <label  slot="title">{{simpleTitle}}</label>
+        <div slot="extra" style="display: inline-flex;">
+          <button  v-on:click="speakTitle()"><a-icon type="sound" /></button>
+          <VueRecordAudio style="height: 27px;width: 30px;display: block;border-radius: unset;background-color: #2A6DE7"   @result="onResult"></VueRecordAudio>
 
-        <div v-for="(item,index) in simpleAnswer" v-bind:key="index">
-          <div><p align="left"><button slot="extra" v-on:click="speak(item)">阅读答案</button>{{index}}. {{item}}</p></div>
+        </div>
 
+
+        <div align="left">
+          <button style="margin-top: 0;margin-bottom: 1em;"  v-show="recordings.length>0" v-on:click="speakAnswer()"><a-icon type="sound" />所有答案</button>
+          <div v-show="recordings.length>0" v-for="(item,index) in simpleAnswer" v-bind:key="index">
+            <div><p align="left"><button slot="extra" v-on:click="speak(item)"><a-icon type="sound" /></button>  {{item}}</p></div>
+
+          </div>
         </div>
 
       </a-card>
 
 
     </div>
-    <div style="width: 400px" class="ant-card ant-card-bordered">
-      <VueRecordAudio @result="onResult"></VueRecordAudio>
-
-      <div v-if="recordings.length>0" class="recorded-audio">
-        <div v-for="(record, index) in recordings" :key="index" class="recorded-item">
-          <div class="audio-container"><audio :src="record.src" controls /></div>
-          <div><button @click="removeRecord(index)" class="button is-dark">delete</button></div>
+    <div >
+      <a-card style="width: 400px;height: auto">
+        <label slot="title">音频记录</label>
+        <div v-show="recordings.length>0" >
+          <div v-for="(record, index) in recordings" :key="index" class="recorded-item">
+            <div class="audio-container"><audio :src="record.src" controls /><button @click="removeRecord(index)" class="button is-dark">delete</button></div>
+            <div></div>
+          </div>
         </div>
-      </div>
+      </a-card>
     </div>
+
+
 
 
   </div>
@@ -139,6 +149,7 @@ td{
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  height: 54px;
 }
 .audio-container {
   display: flex;

@@ -49,42 +49,21 @@
 
 <script>
 import ProblemAPI from "@/api/ProblemAPI";
-
 export default {
-  name: "ProblemAdd",
+  name: "DynamicForm",
   data() {
     return {
       formLayout: 'horizontal',
-      form: this.$form.createForm(this, {name: 'coordinated'}),
-      inputProblemText: "",
+      form: this.$form.createForm(this, { name: 'coordinated' }),
+      inputProblemText:"",
     };
   },
   methods: {
-    //去左空格;
-    ltrim(s) {
-      return s.replace(/(^\s*)/g, "");
-    },
-    //去右空格;
-    rtrim(s) {
-      return s.replace(/(\s*$)/g, "");
-    },
-    //去左右空格;
-    trim(s) {
-      return s.replace(/(^\s*)|(\s*$)/g, "");
-    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          let answer = values["Answer"];
-          let array = answer.split("\n");
-          let temp = [];
-          for (let i in array) {
-            if (this.trim(array[i]) != '') {
-              temp.push(array[i]);
-            }
-          }
-          ProblemAPI.postProblem(values["Title"], temp, values["Tag"]);
+          ProblemAPI.postProblem(values["Title"],values["Answer"],values["Tag"]);
           console.log('Received values of form: ', values);
         }
       });
@@ -93,20 +72,21 @@ export default {
     // eslint-disable-next-line no-unused-vars
     handleInputChange(value) {
       //只解析带#开头的文本
-      if (this.inputProblemText.startsWith("#") && this.inputProblemText.search("\n") != -1) {
+      if(this.inputProblemText.startsWith("#")&&this.inputProblemText.search("\n")!=-1){
 
-        let index = this.inputProblemText.search("\n");
-        let title = this.inputProblemText.substring(0, index - 1);
-        let answer = this.inputProblemText.substring(index + 1, this.inputProblemText.length);
+        let index=this.inputProblemText.search("\n");
+        let title=this.inputProblemText.substring(0,index-1);
+        let answer=this.inputProblemText.substring(index+1,this.inputProblemText.length);
         this.form.setFieldsValue({
           Title: title,
-          Answer: answer,
+          Answer:answer,
         });
 
-      } else {
+      }
+      else {
         this.form.setFieldsValue({
           Title: ``,
-          Answer: ``,
+          Answer:``,
         });
       }
 
