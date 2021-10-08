@@ -13,14 +13,15 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 data={}
 
-@app.route('/hello', methods=["get"])
-def hello():
-    print("hello world")
-    return "hello world succeed"
+#检测服务器连接成功
+@app.route('/connect', methods=["get"])
+def connect():
+    ret = {'code': 0,'message':'succeed'}
+    return jsonify(ret)
 
 @app.route('/problem', methods=["get"])
 def getProblem():
-    print("hello world")
+    
     return "hello world succeed"
 
 @app.route('/problem', methods=["post"])
@@ -43,8 +44,22 @@ def postProblem():
 
 @app.route('/problem', methods=["put"])
 def putProblem():
-    print("hello world")
-    return "hello world succeed"
+    print("method:put")
+    title=request.form.get("title")
+    answer=request.form.get("answer")
+    #eval(answer) js中json化的数组还原
+    tag=request.form.get("tag")
+    entry={"title":title,"answer":eval(answer),"tag":tag}
+    
+    if(len(data)==0 or title not in data):
+        data[title]=entry
+        print("entry:"+str(entry))
+    else:
+        print("update"+str(entry))
+        data[title]=entry
+    ret = {'code': 0,'message':'succeed'}
+    
+    return jsonify(ret)
 
 @app.route('/problemList', methods=["get"])
 def getProblemList():

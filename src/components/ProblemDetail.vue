@@ -56,10 +56,12 @@ export default {
         audio: 'hold',
         video: 'press'
       },
-      recordings: []
+      recordings: [],
+      lastTitle:"",
     }
   },
   mounted() {
+    this.recordings=[];
 
   },
   methods:{
@@ -93,6 +95,10 @@ export default {
       this.recordings.splice(index, 1)
     },
     onResult (data) {
+      if(this.title!=this.lastTitle){
+        this.lastTitle=this.title;
+        this.recordings=[];
+      }
       this.recordings.push({
         src: window.URL.createObjectURL(data)
       })

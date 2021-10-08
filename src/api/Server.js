@@ -1,15 +1,14 @@
 import axios from "axios";
 
 class ProblemListAPI{
-    path="/problemList"
+    path="/connect"
 
     constructor() {
     }
 
-    async getProblemList(host) {
+    async connect(host) {
         try {
             const response = await axios.get(host+this.path);
-            console.log(response);
             return response;
         } catch (error) {
             console.error(error);

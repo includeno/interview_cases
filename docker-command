@@ -1,0 +1,32 @@
+前端
+#build
+docker build . -t interview:1.0
+
+#run
+docker run -itd -p 8080:5000 --name interview_container interview:1.0
+
+#check
+docker logs -ft interview_container
+docker exec -it interview_container /bin/bash
+
+#clean
+docker stop interview_container
+docker rm interview_container
+docker image rm interview:1.0
+
+后台
+docker pull python:3.9.7-slim
+#build
+docker build . -f /flask/Dockerfile -t interview_server:1.0
+
+#run
+docker run -itd -p 3000:3000 --name interview_server_container interview_server:1.0
+
+#check
+docker logs -ft interview_server_container
+docker exec -it interview_server_container /bin/bash
+
+#clean
+docker stop interview_server_container
+docker rm interview_server_container
+docker image rm interview_server:1.0

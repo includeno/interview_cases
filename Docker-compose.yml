@@ -1,0 +1,23 @@
+version: '2'
+services:
+  vue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: interview:1.0
+    container_name: interview_container
+    ports:
+      - "8080:5000"
+    
+  server:
+    build:
+      context: .
+      dockerfile: ./flask/Dockerfile
+    image: interview_server:1.0
+    container_name: interview_server_container
+    ports:
+      - "3000:3000"
+    environment:
+      - spring.application.name=kill01
+    
+    

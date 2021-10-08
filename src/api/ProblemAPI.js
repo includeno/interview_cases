@@ -1,15 +1,14 @@
 import axios from "axios";
-import host from "@/api/Host";
 
 class ProblemAPI{
-    path=host+"/problem"
+    path="/problem";
 
     constructor() {
     }
 
-    async getProblem() {
+    async getProblem(host) {
         try {
-            const response = await axios.get(this.path+'');
+            const response = await axios.get(host+this.path+'');
             console.log(response);
             return response;
         } catch (error) {
@@ -17,13 +16,13 @@ class ProblemAPI{
         }
     }
 
-    async postProblem(title,answer,tag) {
+    async postProblem(host,title,answer,tag) {
         try {
             let formdata=new FormData();
             formdata.append("title",title);
             formdata.append("answer",JSON.stringify(answer));
             formdata.append("tag",tag);
-            const response = await axios.post(this.path+'',formdata);
+            const response = await axios.post(host+this.path+'',formdata);
             //console.log(response);
             return response;
         } catch (error) {
@@ -31,19 +30,23 @@ class ProblemAPI{
         }
     }
 
-    async putProblem() {
+    async putProblem(host,title,answer,tag) {
         try {
-            const response = await axios.get(this.path+'');
-            console.log(response);
+            let formdata=new FormData();
+            formdata.append("title",title);
+            formdata.append("answer",JSON.stringify(answer));
+            formdata.append("tag",tag);
+            const response = await axios.put(host+this.path,formdata);
+
             return response;
         } catch (error) {
             console.error(error);
         }
     }
 
-    async deleteProblem() {
+    async deleteProblem(host) {
         try {
-            const response = await axios.get(this.path+'');
+            const response = await axios.get(host+this.path);
             console.log(response);
             return response;
         } catch (error) {

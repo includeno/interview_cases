@@ -63,7 +63,7 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          ProblemAPI.postProblem(values["Title"],values["Answer"],values["Tag"]);
+          ProblemAPI.postProblem(this.STORE.state.host,values["Title"],values["Answer"],values["Tag"]);
           console.log('Received values of form: ', values);
         }
       });

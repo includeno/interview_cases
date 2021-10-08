@@ -84,8 +84,8 @@ export default {
               temp.push(array[i]);
             }
           }
-          ProblemAPI.postProblem(values["Title"], temp, values["Tag"]);
-          console.log('Received values of form: ', values);
+          ProblemAPI.postProblem(this.STORE.state.host,values["Title"], temp, values["Tag"]);
+
         }
       });
 

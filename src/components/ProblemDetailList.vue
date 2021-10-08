@@ -1,11 +1,28 @@
 <template>
-  <div >
+  <div>
+
     <table align="center">
-<!--        //eslint下必须:写法-->
-      <a-button v-on:click="exportData()"><a-icon type="download" /> 下载 </a-button>
-        <div v-for="(entry,index) in problemdata" v-bind:key="index" >
-          <ProblemDetail :title="entry.title" :answer="entry.answer"></ProblemDetail>
+      <!--        //eslint下必须:写法-->
+      <a-button v-show="problemdata.length>0" v-on:click="changeMode()">改变模式</a-button>
+
+      <div v-show="problemdata.length==0">
+        <h1>暂无题目</h1>
+      </div>
+
+      <div v-if="mode=='single'">
+        <a-button v-show="problemdata.length!=0" v-on:click="modeIndexSubstract">-</a-button>
+        <a-button v-show="problemdata.length!=0" v-on:click="modeIndexAdd">+</a-button>
+        <label v-show="problemdata.length!=0" >当前第{{modeIndex+1}}个</label>
+
+        <div v-show="problemdata.length>0">
+          <ProblemDetail v-if="problemdata.length>=0" :title="problemdata[modeIndex].title" :answer="problemdata[modeIndex].answer"></ProblemDetail>
         </div>
+      </div>
+      <div v-else>
+        <div v-show="mode=='list'&&problemdata.length!=0" v-for="(entry,index) in problemdata" v-bind:key="index">
+          <ProblemDetail v-show="mode=='list'&&problemdata.length!=0" :title="entry.title" :answer="entry.answer"></ProblemDetail>
+        </div>
+      </div>
 
     </table>
 
@@ -21,54 +38,75 @@ export default {
   components: {
     ProblemDetail,
   },
-  props: {
-
-  },
+  props: {},
   data() {
     return {
-      problemdata:[],
-
+      problemdata: [],
+      mode:"list",//single list
+      modeIndex:0,
     }
   },
   mounted() {
     (this.loadData)();
 
   },
-  methods:{
+  methods: {
+    modeIndexAdd(){
+      if(this.modeIndex<this.problemdata.length-1){
+        this.modeIndex++;
+      }
+    },
+    modeIndexSubstract(){
+      if(this.modeIndex>0){
+        this.modeIndex--;
+      }
+    },
+    changeMode() {
+      if(this.mode=='list'){
+        this.mode='single';
 
-    async loadData() {
-      this.problemdata=[];
-      let response=await ProblemListAPI.getProblemList();
-      let ans=response.data.data;
-      if(ans!=null){
-        for(let i in ans){
-          this.problemdata.push(ans[i]);
+        if(this.modeIndex>this.problemdata.length-1){
+          this.modeIndex=0;
         }
       }
-    },
-
-    exportData(){
-      let array=[];
-      for(let i=0;i<this.problemdata.length;i++){
-        array.push({title: this.problemdata[i].title, answer: this.problemdata[i].answer, tag: this.problemdata[i].tag});
+      else{
+        this.mode='list';
       }
-      let url=window.URL.createObjectURL(new Blob([JSON.stringify(array)], {type: "application/json"}))
-      let a = document.createElement('a');
-      a.href = url;
-      a.download = 'data.json';
-      a.click();
-      window.URL.revokeObjectURL(url);
-      //document.removeChild(a);
-    },
-  },
-  computed:{
 
-  }
+    },
+
+    async loadData() {
+      this.problemdata = [];
+      let response = await ProblemListAPI.getProblemList(this.STORE.state.host);
+      if(response==null){
+        alert("！")
+        return;
+      }
+      let ans = response.data.data;
+      if (ans != null) {
+        console.log(ans)
+        for (let i in ans) {
+          if(ans[i]==null){
+            continue;
+          }
+          console.log(ans[i])
+          let title=ans[i].title;
+          let answer=ans[i].answer;
+          let tag=ans[i].tag;
+
+          this.problemdata.push({title:title,answer:answer,tag:tag});
+        }
+        this.modeIndex=0;
+      }
+    },
+
+  },
+  computed: {}
 }
 </script>
 
 <style>
-.board{
+.board {
   text-align: center;
   margin: 0 auto;
   width: 1000px;

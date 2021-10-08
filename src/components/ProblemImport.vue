@@ -1,14 +1,20 @@
 <template>
-  <div>
-    <a-textarea v-model="inputProblemText" />
+  <div style="display: block" align="center">
+    <div style="display: flex;" >
+      <a-upload
+          name="file"
+          :fileList="fileList"
+          :beforeUpload="beforeUpload"
+      >
+        <a-button> <a-icon type="upload"/>上传</a-button>
+      </a-upload>
+      <a-button v-on:click="confirm"> <a-icon type="confirm"/>加载</a-button>
+    </div>
 
-    <a-upload
-        name="file"
-        :fileList="fileList"
-        :beforeUpload="beforeUpload"
-    >
-      <a-button> <a-icon type="upload"/>上传</a-button>
-    </a-upload>
+    <br>
+    <a-textarea v-model="inputProblemText" style="height: 1000px"/>
+
+
   </div>
 </template>
 
@@ -19,6 +25,8 @@ export default {
   data() {
     return {
       inputProblemText:"",
+      isHeight:true,
+      minHeight:0,
 
       fileList:[],//文件列表
     };
@@ -46,6 +54,20 @@ export default {
       }
 
     },
+    async confirm() {
+      if (this.inputProblemText != '') {
+        let array = (JSON.parse((this.inputProblemText)));//数组
+        for (let i = 0; i < array.length; i++) {
+
+          let temp = []
+          for (let j in array[i].answer) {
+            temp.push(array[i].answer[j]);
+          }
+
+          await ProblemAPI.postProblem(this.STORE.state.host,array[i].title, array[i].answer, array[i].tag)
+        }
+      }
+    },
     beforeUpload(file){
       var that=this;
       //只读取json文件
@@ -54,17 +76,18 @@ export default {
         //将文件以文本形式读入页面
         reader.readAsText(file);
         reader.onload=async ()=>{
-          let array=(JSON.parse((reader.result)));//数组
-          //console.log("array:"+(array))
-          for(let i=0;i<array.length;i++){
+          //let array=(JSON.parse((reader.result)));//数组
+          this.inputProblemText=reader.result;
 
-            let temp=[]
-            for(let j in array[i].answer){
-              temp.push(array[i].answer[j]);
-            }
-            console.log(temp);//对象
-            await ProblemAPI.postProblem(array[i].title,array[i].answer,array[i].tag)
-          }
+          // for(let i=0;i<array.length;i++){
+          //
+          //   let temp=[]
+          //   for(let j in array[i].answer){
+          //     temp.push(array[i].answer[j]);
+          //   }
+          //
+          //   await ProblemAPI.postProblem(array[i].title,array[i].answer,array[i].tag)
+          // }
           that.fileList=[]
           return true;
         }
