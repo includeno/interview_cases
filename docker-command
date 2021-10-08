@@ -1,4 +1,4 @@
-前端
+web
 #build
 docker build . -t interview:1.0
 
@@ -14,7 +14,7 @@ docker stop interview_container
 docker rm interview_container
 docker image rm interview:1.0
 
-后台
+server
 docker pull python:3.9.7-slim
 #build
 docker build . -f /flask/Dockerfile -t interview_server:1.0
@@ -30,3 +30,6 @@ docker exec -it interview_server_container /bin/bash
 docker stop interview_server_container
 docker rm interview_server_container
 docker image rm interview_server:1.0
+
+
+访问http://localhost:8080

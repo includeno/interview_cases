@@ -2,7 +2,7 @@
 
 功能介绍:
 
-✅导入题目(文件/直接添加) ✅导出题目
+✅导入题目(文件/直接添加) ✅导出题目至文件
 
 ✅查看题目 ✅阅读题目
 
@@ -10,18 +10,10 @@
 
 ✅查看答案 ✅阅读答案
 
-#使用到的库
 
-## vuex 用于管理服务器地址
-yarn add vuex
 
-## vue-record 用于录制声音
-yarn add @musoftware/vue-record
 
-## ant-design-vue 用于提供界面元素
-yarn add ant-design-vue
-
-## Project setup
+# 项目配置 终端内输入
 ```
 yarn install
 ```
@@ -41,28 +33,34 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 使用到的库 终端内输入
 
+## vuex 用于管理服务器地址
+yarn add vuex
 
-Docker:
+## vue-record 用于录制声音
+yarn add @musoftware/vue-record
 
-# Build
-docker build . -t interview:1.0
+## ant-design-vue 用于提供界面元素
+yarn add ant-design-vue
 
-# Run
-docker run -itd -p 8080:5000 --name interview_container interview:1.0
+# 本地启动方法 终端内输入
 
-http://localhost:8080即可打开网站
+## web
+yarn
 
-# Check
-docker logs -ft interview_container
+yarn build
 
-docker exec -it interview_container /bin/bash
+yarn global add serve
 
-# Clean
-docker stop interview_container
+serve -s "/Users/xxxxx/interview_cases/dist"
 
-docker rm interview_container
+## server
 
-docker images rm interview:1.0
+python flask/flaskserver.py
+
+# docker方式部署 终端内输入
+
+docker-compose部署 参考文件 docker-compose-command
+
+docker直接部署 参考文件 docker-command
