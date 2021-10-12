@@ -28,6 +28,8 @@ jobs:
       - name: docker buildx
         run: 
           docker buildx create --use --name mybuilder
+      - name: docker buildx run
+        run: 
           docker buildx inspect --bootstrap
       - name: Login to DockerHub
         uses: docker/login-action@v1
