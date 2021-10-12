@@ -1,0 +1,33 @@
+web
+docker pull includeno/interview:1.0
+
+#run
+docker run -itd -p 8080:5000 --name interview_container includeno/interview:1.0
+
+#check
+docker logs -ft interview_container
+docker exec -it interview_container /bin/bash
+
+#clean
+docker stop interview_container
+docker rm interview_container
+docker image rm includeno/interview:1.0
+
+server
+docker pull python:3.9.7-slim
+docker pull includeno/interview_server:1.0
+
+#run
+docker run -itd -p 3000:3000 --name interview_server_container includeno/interview_server:1.0
+
+#check
+docker logs -ft interview_server_container
+docker exec -it interview_server_container /bin/bash
+
+#clean
+docker stop interview_server_container
+docker rm interview_server_container
+docker image rm includeno/interview_server:1.0
+
+
+访问http://localhost:8080

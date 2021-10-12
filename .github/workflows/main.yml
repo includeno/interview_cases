@@ -37,6 +37,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
+          platforms: linux/amd64,linux/arm64
           tags: "includeno/${{ env.TAG_NAME }}:latest,includeno/${{ env.TAG_NAME }}:1.0"
           push: true
       - name: Push to Docker Hub
@@ -45,6 +46,7 @@ jobs:
         with:
           context: .
           file: ./flask/Dockerfile
+          platforms: linux/amd64,linux/arm64
           tags: "includeno/${{ env.TAG_NAME }}_server:latest,includeno/${{ env.TAG_NAME }}_server:1.0"
           push: true
       - name: The job has succeeded
@@ -71,7 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: .dist-v${{ env.STATE_RELEASE_VERSION}}-production.zip
+          asset_path: dist-v${{ env.STATE_RELEASE_VERSION}}-production.zip
           asset_name: interview-cases-v${{ env.STATE_RELEASE_VERSION}}-production.zip
           asset_content_type: application/zip
       #https://github.com/8398a7/action-slack
