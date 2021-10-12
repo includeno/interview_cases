@@ -10,8 +10,8 @@
 
 ✅查看答案 ✅阅读答案
 
-
-
+关于部署在http服务器上不能使用录音功能的问题
+https://blog.csdn.net/weixin_44493841/article/details/108073810
 
 # 项目配置 终端内输入
 ```

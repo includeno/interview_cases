@@ -30,4 +30,24 @@ docker rm interview_server_container
 docker image rm includeno/interview_server:1.0
 
 
-访问http://localhost:8080
+#m1 mac
+
+docker buildx create --use --name m1_builder
+
+docker buildx inspect --bootstrap
+
+docker login
+
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --push -f flask/Dockerfile -t includeno/interview_server:1.0 . 
+
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --push -f Dockerfile -t includeno/interview:1.0 . 
+
+Web http://localhost:8080
+Server http://localhost:3000
+
+Web http://47.100.40.223:8080
+Server http://47.100.40.223:3000
