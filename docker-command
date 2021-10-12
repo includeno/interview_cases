@@ -17,7 +17,7 @@ docker image rm interview:1.0
 server
 docker pull python:3.9.7-slim
 #build
-docker build . -f /flask/Dockerfile -t interview_server:1.0
+docker build . -f flask/Dockerfile -t interview_server:1.0
 
 #run
 docker run -itd -p 3000:3000 --name interview_server_container interview_server:1.0
